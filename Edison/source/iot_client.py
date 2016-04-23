@@ -164,7 +164,7 @@ class IoTWebSocketClient(WebSocketClient):
     def on_connection_close(self):
         """
         This is called when server closed the connection. After server closes
-        connection, Pulse will try to reconnect immediately to reestablish
+        connection, This will try to reconnect immediately to reestablish
         communication.
         """
         global iot_connected
@@ -177,14 +177,14 @@ class IoTWebSocketClient(WebSocketClient):
     def on_connection_error(self, exception):
         """
         This is called in case if connection to the server could
-        not be established. Pulse will try to reconnect immediately to
+        not be established. This will try to reconnect immediately to
         establish communication. Connection error might occur when clients
         try to connect when server is down.
         """
         global iot_connected
         iot_connected = False
         self.ws_connection = None
-        logging.warning('NMS Connection error: Conn %s | %s' %
+        logging.warning('IoT Connection error: Conn %s | %s' %
                         (str(iot_connected), str(exception)))
         time.sleep(prefs.getint('timeouts', 'timeout_nms_retry', fallback=2))
         self.connect()
@@ -192,7 +192,7 @@ class IoTWebSocketClient(WebSocketClient):
     def inspect_queue_for_messages(self):
         '''
         Asynchronously run to constantly inspect if there is any existing
-        notification in the queue to be sent to the NMS. Any other Pulse
+        message in the queue to be sent to the IoT. Any other
         module wanting to send a notification should place it first in the
         queue.
 
@@ -211,14 +211,11 @@ class IoTWebSocketClient(WebSocketClient):
             except Empty:
                 # TODO remove autogenerating notifications. Just for testing
                 continue
-                # enqueue_notification({'msg': 'Test '
-                #                              + str(random.randint(1,10)),
-                #                       'destination': 'Pulse'})
         return
 
     def send_message(self, handler, msgtype, msg, respond_id=None):
         '''
-        Send a message to NMS.
+        Send a message to IoT.
 
         :param handler: API handler from where reply comes from
         :param msgtype: Type of message sent. Example: 'notification', 'ack'
@@ -239,11 +236,11 @@ class IoTWebSocketClient(WebSocketClient):
         logging.info(
             '%s | Sending to %s - msgid: %s, handler: %s, command: %s' %
             (str(datetime.datetime.now()),
-             'NMS', respond_id, handler, msgtype))
+             'IoT', respond_id, handler, msgtype))
         pp_message = pprint.pformat(message)
         logging.info(
-            '>>>Sending to NMS<<<\n' +
-            '\treceiver:\t\t%s\n' % 'NMS' +
+            '>>>Sending to IoT Backend<<<\n' +
+            '\treceiver:\t\t%s\n' % 'IoT Backend' +
             '\thandler:\t%s\n\tmessage id:\t%d\n' % (handler, respond_id) +
             '\tmessagetype:\t%s\n' % (msgtype) +
             '\t=============================================\n'
@@ -319,7 +316,7 @@ class IoTWebSocketClient(WebSocketClient):
                         compiled_message = ''
                 return
 
-            logging.warning('Malformed JSON packet received from NMS')
+            logging.warning('Malformed JSON packet received from IoT')
             return
 
     def unpack_message(self, message):
@@ -348,7 +345,7 @@ class IoTWebSocketClient(WebSocketClient):
             except ValueError:
                 respond_id = -1
 
-            logging.warning('Malformed packet received from NMS' +
+            logging.warning('Malformed packet received from IoT' +
                             ' - Missing parameter')
             return
 
@@ -365,12 +362,12 @@ class IoTWebSocketClient(WebSocketClient):
         :return: None
         '''
         logging.info(
-            '%s | Receiving from NMS - msgid: %d, handler: %s, command: %s' %
+            '%s | Receiving from IoT - msgid: %d, handler: %s, command: %s' %
             (str(datetime.datetime.now()), msgid, handler, msgtype))
         pp_data = pprint.pformat(data)
         logging.info(
-            '>>>Receiving from NMS<<<\n' +
-            '\tsender:\t\t%s\n' % 'NMS' +
+            '>>>Receiving from IoT<<<\n' +
+            '\tsender:\t\t%s\n' % 'IoT' +
             '\thandler:\t%s\n\tmessage id:\t%d\n' % (handler, msgid) +
             '\tmessagetype:\t%s\n' % (msgtype) +
             '\t=============================================\n'
@@ -402,7 +399,7 @@ class IoTWebSocketClient(WebSocketClient):
 
     def send_notification_to_final_user(self, message):
         '''
-        Handle the reception of a send_notification message from NMS.
+        Handle the reception of a send_notification message from IoT.
 
         :param message: Notification to be sent. Dictionary with corresponding
          fields.
@@ -468,7 +465,7 @@ class IoTWebSocketClient(WebSocketClient):
 
 def enqueue_message(message, check_connected=False):
     '''
-    Add a new notification to the outgoing messages queue to be sent to NMS.
+    Add a new notification to the outgoing messages queue to be sent to IoT.
 
     :param message: Message to be sent. It is a dictionary with the
      corresponding key, value pairs.
