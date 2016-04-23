@@ -10,7 +10,7 @@ from config_handler import config, prefs
 from multiprocessing.pool import ThreadPool
 
 import client as client_module
-
+import pyupm_i2clcd as lcd
 import functools
 import json
 import time
@@ -154,6 +154,7 @@ class IoTWebSocketClient(WebSocketClient):
         """
         from random import randint
         global iot_connected
+        self.thisLCD = lcd.Jhd1313m1(0, 0x3E, 0x62)
         iot_connected = True
         logging.info('IoT Connected! Conn:%s' % str(iot_connected))
         self.send_message('channel', 'setchannelmode',
@@ -424,11 +425,32 @@ class IoTWebSocketClient(WebSocketClient):
         myLcd.write(line2)
 
     def print_lcd_message(self, message):
-        global myLcd
         line1 = message['line1']
         line2 = message['line2']
         is_error = message['is_error']
-        self.print_display(myLcd, line1, line2, is_error)
+
+        print(line1)
+        print(line2)
+        print(is_error)
+        print(self.thisLCD)
+
+        self.thisLCD.setColor(0, 0, 0)
+        self.thisLCD.setCursor(0,0)
+        self.thisLCD.write('                       ')
+        self.thisLCD.setCursor(1,0)
+        self.thisLCD.write('                       ')
+
+        if is_error == True:
+            self.thisLCD.setColor(255, 0, 0)
+        else:
+            self.thisLCD.setColor(0, 255, 0)
+
+
+        self.thisLCD.setCursor(0,0)
+        self.thisLCD.write(line1)
+        self.thisLCD.setCursor(1,0)
+        self.thisLCD.write(line2)
+
         return
 
     def send_notification_to_final_user(self, message):
