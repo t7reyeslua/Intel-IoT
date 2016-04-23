@@ -1,4 +1,6 @@
 import logging
+# import psycopg2
+# from user import get_user
 
 
 class BaseAPIHandler:
@@ -12,36 +14,13 @@ class BaseAPIHandler:
     message_handlers = {}
 
     def authenticate(self, client, msgid, data, user, msgtype):
-        '''
-        Authenticate client to be able to use API
-
-        :param client: Client
-        :param msgid: Message ID
-        :param data: Data
-        :param user: User
-        :param msgtype: Message Type
-        :return: True/False
-        '''
         pass
 
     def handle(self, msgid, msgtype, data, client, user=None):
         '''
         Find the right handler and distribute the incoming message to there.
-
-        :param msgid: Message ID
-        :param msgtype: Message Type
-        :param data: Data
-        :param client: Client
-        :param user: User
-        :return: None
         '''
         try:
-            if not self.authenticate(client, msgid, data, user, msgtype):
-                return (self.name, None, 'error',
-                        {'msg': 'User not authenticated to use function ' +
-                                'in API ' + self.name},
-                        msgid)
-
             func = self.message_handlers[msgtype]
             try:
                 return func(client, msgid, data, user)

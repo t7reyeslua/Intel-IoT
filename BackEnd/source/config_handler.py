@@ -1,4 +1,7 @@
-import ConfigParser as configparser
+import configparser
 
 config = configparser.ConfigParser()
 config.read('server.config')
+
+prefs = configparser.ConfigParser()
+prefs.read('preferences.config')

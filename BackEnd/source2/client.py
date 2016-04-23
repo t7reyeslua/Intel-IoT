@@ -1,5 +1,5 @@
 import logging
-from config_handler import config, prefs
+from config_handler import config
 import pprint
 
 clients = {}
@@ -19,7 +19,6 @@ class Client:
         self.channels = {}
         self.name = None
         self.id = None
-        self.from_trusted_ip = False
         self.client_load_info()
 
     def set_name(self, name):
@@ -43,17 +42,9 @@ class Client:
 
         :return: None
         '''
-        whitelisted_clients = config.get('clients', 'whitelist', fallback='')
-        whitelist = whitelisted_clients.split(',')
         self.name = self.host
         self.id = -1
-        if self.host in whitelist:
-            self.id = config.getint(self.name, 'id', fallback=-1)
-            expected_ip = config.get(self.name, 'ip', fallback=None)
-            if self.ip == expected_ip or (self.ip == '127.0.0.1'
-                                          and expected_ip == 'localhost'):
-                self.from_trusted_ip = True
-
+        self.from_trusted_ip = True
         logging.info("Client info loaded: %s, %s, %s, %s" %
                      (self.ip, self.host, self.id, self.from_trusted_ip))
         return

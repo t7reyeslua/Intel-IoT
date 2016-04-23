@@ -1,15 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import logging
 from logging.handlers import RotatingFileHandler
+from APIs.control.notificationAPI import scheduled_notifications_watchdog
 import sys
 import signal
 import os
 from config_handler import config
-
 from daemon import Daemon
 
 
@@ -17,6 +17,8 @@ def setup_logging():
     '''
     Create logging based on settings in server.config. At least log to a
     logfile that has a maximum size.
+
+    :return: None
     '''
     log_location = config.get('locations', 'log')
     if not os.path.exists(log_location):
@@ -24,6 +26,7 @@ def setup_logging():
 
     # Determine logging level
     ll = config.get('server', 'logging_level')
+    logging_level = logging.DEBUG
     if ll == 'debug':
         logging_level = logging.DEBUG
     elif ll == 'info':
@@ -63,6 +66,10 @@ def setup_logging():
 def signal_handler(signal, frame):
     '''
     Handle server shutdown.
+
+    :param signal: signal
+    :param frame: frame
+    :return: None
     '''
     logging.info("Server shutting down")
     sys.exit(0)
@@ -71,6 +78,8 @@ def signal_handler(signal, frame):
 def setup_signal_handling():
     '''
     Setup OS signal handlers for the server.
+
+    :return: None
     '''
     # Close or terminate server
     signal.signal(signal.SIGINT, signal_handler)
@@ -80,70 +89,85 @@ def setup_signal_handling():
 def setup_database():
     '''
     Do preparation work on the database.
+
+    :return: None
     '''
-    # import database.control_functions as database
-    # database.delete_all_sessions()
-    return
+    pass
+
 
 def setup_server():
     '''
     Setup the necessary handlers for the server.
+
+    :return: None
     '''
     from APIs.websocketHandler import WebsocketAPIHandler
+    from APIs.httpHandler import HttpAPIHandler
+    from APIs.socketHandler import TCPServer
+
+    socket_server = TCPServer()
     http_server = tornado.httpserver.HTTPServer(
         tornado.web.Application([
-            ('/API-ws/(.*)', WebsocketAPIHandler)]))
-            # Below are features usefull during development
-            # # TODO: Remove for production?
-            # ('/APItestSuite/(.*)', tornado.web.StaticFileHandler,
-            #  {'path': 'test_tools/webinterface',
-            #   'default_filename': 'index.html'}),
-            # ('/coverage/(.*)', tornado.web.StaticFileHandler,
-            #     {'path': 'htmlcov', 'default_filename': 'index.html'})]))
-    return http_server
+            ('/API-ws/(.*)', WebsocketAPIHandler),
+            ('/API-http/(.*)', HttpAPIHandler),
+            # Below are features useful during development
+            ('/APItestSuite/(.*)', tornado.web.StaticFileHandler,
+             {'path': 'test_tools/webinterface',
+              'default_filename': 'index.html'}),
+            ('/coverage/(.*)', tornado.web.StaticFileHandler,
+                {'path': 'htmlcov', 'default_filename': 'index.html'})]))
+    return socket_server, http_server
 
 
-class Backend:
+class NMS:
     '''
     Single server instance.
     '''
     def run(self):
         '''
         Run the server.
+        :return: None
         '''
         # Run setup
         setup_logging()
         setup_signal_handling()
         setup_database()
-        http_server = setup_server()
+        socket_server, http_server = setup_server()
 
         # Start servers
         # Start Socket server
         logging.info("Launching socket listener")
+        socket_server.listen(config.get('server', 'tcpport'),
+                             config.get('server', 'listen'))
 
         # Prepare HTTP server
         ioloop = tornado.ioloop.IOLoop.instance()
+        scheduled_notifications_watchdog(ioloop)
 
         http_server.listen(config.get('server',  'webport'))
         logging.info("Launching Websocket and HTTP POST listeners")
         ioloop.start()
 
 
-class Backend_Daemon(Daemon):
+class NMS_Daemon(Daemon):
+    '''
+    Daemon wrapper around MCS server. Using this allows us to also launch the
+    server in non-daemon mode, which is useful during development.
+    '''
     def run(self):
-        server = Backend()
+        server = NMS()
         server.run()
 
 
 def main():
-    if __file__ != 'source/server.py':
-        print("The server needs to be run from the root directory " +
-              "It is\nadvisable to use the backend.sh script " +
+    if __file__ != 'source/server_nms.py':
+        print("The server needs to be run from the NMS root directory " +
+              "(e.g. NMS/). It is\nadvisable to use the nms.sh script " +
               "that is provided there.")
         sys.exit(2)
 
     if len(sys.argv) == 2:
-        daemon = Backend_Daemon('/tmp/iot.pid')
+        daemon = NMS_Daemon('/tmp/nms.pid')
         if 'start' == sys.argv[1]:
             print("Starting server")
             daemon.start()
@@ -159,7 +183,7 @@ def main():
             sys.exit(2)
         sys.exit(0)
     else:
-        server = Backend()
+        server = NMS()
         server.run()
 
 

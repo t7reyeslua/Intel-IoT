@@ -12,7 +12,6 @@ def handle_list_available_clients(client, msgid, msg, user):
             elem = {'ip': target.ip,
                     'name': target.name,
                     'host': target.host,
-                    'trusted_ip': target.from_trusted_ip,
                     'id': target.id}
 
             data['clients'].append(elem)

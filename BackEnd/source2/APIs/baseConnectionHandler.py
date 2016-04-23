@@ -6,7 +6,6 @@ import tornado
 import tornado.ioloop
 import pprint
 import datetime
-from config_handler import config, prefs
 from APIs.control.controlHandler import ControlAPIHandler
 handlers = {'control': ControlAPIHandler()}
 
@@ -142,7 +141,7 @@ class BaseConnectionHandler:
 
         :param handler: API handler. e.g. 'control'
         :param msgid: Id of message
-        :param msgtype: Type of message request. e.g. 'send_notification'
+        :param msgtype: Type of message request. e.g. 'addBeacon'
         :param data: Data of message
         :param message: message
         :return: None
@@ -166,17 +165,11 @@ class BaseConnectionHandler:
             self.handle_channel_command(msgtype, msgid, data)
         else:
             # 'Normal' message, find correct handler and handle responses
-            # Check if optional user parameter provided in message
-            try:
-                # User id
-                user = message['user']
-            except KeyError:
-                user = None
 
             # Execute message handler, if any. Otherwise request is malformed
             try:
                 response = handlers[handler].handle(msgid, msgtype, data,
-                                                    self.client, user)
+                                                    self.client, None)
             except KeyError as e:
                 logging.error('Unknown handler %s' % handler)
                 self.send(handler, 'error',
@@ -189,8 +182,7 @@ class BaseConnectionHandler:
 
                 if r_receivers is None:
                     # Response just goes current client
-                    self.send_self(r_channel, r_msgtype, r_message,
-                                   r_respondID)
+                    self.send_self(r_channel, r_msgtype, r_message, r_respondID)
                 elif len(r_receivers) > 0:
                     # Find the appropriate channel for all receivers
                     for r in r_receivers:
