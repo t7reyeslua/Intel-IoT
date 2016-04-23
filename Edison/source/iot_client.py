@@ -382,9 +382,10 @@ class IoTWebSocketClient(WebSocketClient):
                 response = self.send_notification_to_final_user(data)
             elif handler == 'control' and msgtype == 'print_message':
                 response = self.print_lcd_message(data)
-        except Exception:
+        except Exception as e:
             logging.error('Unknown exception while handling notification ' +
                           'from IoT')
+            logging.error(e)
         if response is not None:
             r_channel, r_receivers, r_msgtype, \
                 r_message, r_respondID = response
