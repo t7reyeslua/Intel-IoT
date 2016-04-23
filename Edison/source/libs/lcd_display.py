@@ -78,17 +78,17 @@ def config_lcd():
     tlcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
     return tlcd
 
-if __name__ == "__main__":
-    myLcd = config_lcd()
-    # Initialize Jhd1313m1 at 0x3E (LCD_ADDRESS) and 0x62 (RGB_ADDRESS) 
-    print "LCD Display TEST"
-    update_display("work", [1,2,3,4])
-    time.sleep(2)
-    update_display("work", [1,2])
-    time.sleep(2)
-    update_display("gym", [1,2])
-    time.sleep(2)
-    update_display("gym", [1,2,3,4])
-    time.sleep(2)
-    clear_display()
-    time.sleep(2)
+# if __name__ == "__main__":
+#     myLcd = config_lcd()
+#     # Initialize Jhd1313m1 at 0x3E (LCD_ADDRESS) and 0x62 (RGB_ADDRESS)
+#     print "LCD Display TEST"
+#     update_display("work", [1,2,3,4])
+#     time.sleep(2)
+#     update_display("work", [1,2])
+#     time.sleep(2)
+#     update_display("gym", [1,2])
+#     time.sleep(2)
+#     update_display("gym", [1,2,3,4])
+#     time.sleep(2)
+#     clear_display()
+#     time.sleep(2)

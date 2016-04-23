@@ -115,13 +115,13 @@ def run_control_loop():
 ###########################################
 #instantiate all sensors
 ##########################################
-print "initializing the sensors"
-myBuzzer = config_buzzer()
-myDigitalAccelerometer = config_accelerometer()
-
-print "entering control loop"
-while (1):
-    run_control_loop()
-
-# Delete the buzzer object
-del myBuzzer
+# print "initializing the sensors"
+# myBuzzer = config_buzzer()
+# myDigitalAccelerometer = config_accelerometer()
+#
+# print "entering control loop"
+# while (1):
+#     run_control_loop()
+#
+# # Delete the buzzer object
+# del myBuzzer
