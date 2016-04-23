@@ -151,49 +151,49 @@ def setup_devices():
     myLcd = config_lcd()
     return
 
-def main_loop(ioloop):
-    '''
-    Main Loop
-
-    :param ioloop:  Tornado ioloop instance
-    '''
-
-    chord_ind = 0
-    xyz_count = 0
-    # check shake for 5 sec
-    for shake_slot in range (0, 15):
-        myDigitalAccelerometer.getRawValues(x, y, z)
-        outputStr = ("Raw values: x = {0}"
-                     " y = {1}"
-                     " z = {2}").format(upmMMA7660.intp_value(x),
-                                        upmMMA7660.intp_value(y),
-                                        upmMMA7660.intp_value(z))
-        if (abs(upmMMA7660.intp_value(x)) > SHAKE_THRESHOLD) or \
-                (abs(upmMMA7660.intp_value(y)) > SHAKE_THRESHOLD) or \
-                (abs(upmMMA7660.intp_value(z)) > SHAKE_THRESHOLD):
-            print "value exceeded"
-            print xyz_count
-            xyz_count = xyz_count + 1
-            if (xyz_count >= xyz_thresh):
-                print "increasing thresh"
-                for chord_ind in range (0,15):
-                    print myBuzzer.playSound(chords[chord_ind], 100000)
-                    print "buzzing"
-                    #time.sleep(0.1)
-                    #chord_ind = (chord_ind + 1) % 2
-                    chord_ind += 1
-                myBuzzer.stopSound()
-                xyz_count = 0
-                print outputStr
-        time.sleep(0.05)
-    print "loop over"
-    xyz_count = 0
-
-    # Schedule next
-    callback_time = 0
-    ioloop.call_at(ioloop.time() + callback_time,
-                   main_loop, ioloop)
-    return
+# def main_loop(ioloop):
+#     '''
+#     Main Loop
+#
+#     :param ioloop:  Tornado ioloop instance
+#     '''
+#
+#     chord_ind = 0
+#     xyz_count = 0
+#     # check shake for 5 sec
+#     for shake_slot in range (0, 15):
+#         myDigitalAccelerometer.getRawValues(x, y, z)
+#         outputStr = ("Raw values: x = {0}"
+#                      " y = {1}"
+#                      " z = {2}").format(upmMMA7660.intp_value(x),
+#                                         upmMMA7660.intp_value(y),
+#                                         upmMMA7660.intp_value(z))
+#         if (abs(upmMMA7660.intp_value(x)) > SHAKE_THRESHOLD) or \
+#                 (abs(upmMMA7660.intp_value(y)) > SHAKE_THRESHOLD) or \
+#                 (abs(upmMMA7660.intp_value(z)) > SHAKE_THRESHOLD):
+#             print "value exceeded"
+#             print xyz_count
+#             xyz_count = xyz_count + 1
+#             if (xyz_count >= xyz_thresh):
+#                 print "increasing thresh"
+#                 for chord_ind in range (0,15):
+#                     print myBuzzer.playSound(chords[chord_ind], 100000)
+#                     print "buzzing"
+#                     #time.sleep(0.1)
+#                     #chord_ind = (chord_ind + 1) % 2
+#                     chord_ind += 1
+#                 myBuzzer.stopSound()
+#                 xyz_count = 0
+#                 print outputStr
+#         time.sleep(0.05)
+#     print "loop over"
+#     xyz_count = 0
+#
+#     # Schedule next
+#     callback_time = 0
+#     ioloop.call_at(ioloop.time() + callback_time,
+#                    main_loop, ioloop)
+#     return
 
 class SmartBag:
     '''
