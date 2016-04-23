@@ -7,7 +7,7 @@ if [ $# -eq 1 ]
     then
         if [ $1 = "start" ] || [ $1 = "stop" ] || [ $1 = "restart" ]
             then
-                source/server.py $1
+                source/server_iot.py $1
             else
                 echo "Unknown command $1"
                 echo "Usage: $0 start|stop|restart"
@@ -15,5 +15,5 @@ if [ $# -eq 1 ]
     else
         echo "Running as non-daemon. To run as daemon execute as:"
         echo "$0 start|stop|restart"
-        source/server.py
+        source/server_iot.py
 fi

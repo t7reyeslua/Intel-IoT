@@ -1,5 +1,5 @@
 import logging
-from config_handler import config, prefs
+from config_handler import config
 import pprint
 
 clients = {}

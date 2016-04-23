@@ -167,11 +167,7 @@ class BaseConnectionHandler:
         else:
             # 'Normal' message, find correct handler and handle responses
             # Check if optional user parameter provided in message
-            try:
-                # User id
-                user = message['user']
-            except KeyError:
-                user = None
+            user = None
 
             # Execute message handler, if any. Otherwise request is malformed
             try:

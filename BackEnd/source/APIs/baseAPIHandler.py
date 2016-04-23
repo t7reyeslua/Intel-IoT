@@ -36,12 +36,6 @@ class BaseAPIHandler:
         :return: None
         '''
         try:
-            if not self.authenticate(client, msgid, data, user, msgtype):
-                return (self.name, None, 'error',
-                        {'msg': 'User not authenticated to use function ' +
-                                'in API ' + self.name},
-                        msgid)
-
             func = self.message_handlers[msgtype]
             try:
                 return func(client, msgid, data, user)

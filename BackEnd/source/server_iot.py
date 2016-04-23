@@ -1,11 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import tornado.httpserver
 import tornado.websocket
 import tornado.ioloop
 import tornado.web
 import logging
 from logging.handlers import RotatingFileHandler
-from APIs.control.notificationAPI import scheduled_notifications_watchdog
 import sys
 import signal
 import os
@@ -102,24 +101,22 @@ def setup_server():
     :return: None
     '''
     from APIs.websocketHandler import WebsocketAPIHandler
-    from APIs.httpHandler import HttpAPIHandler
-    from APIs.socketHandler import TCPServer
 
-    socket_server = TCPServer()
     http_server = tornado.httpserver.HTTPServer(
         tornado.web.Application([
             ('/API-ws/(.*)', WebsocketAPIHandler),
-            ('/API-http/(.*)', HttpAPIHandler),
-            # Below are features useful during development
-            ('/APItestSuite/(.*)', tornado.web.StaticFileHandler,
-             {'path': 'test_tools/webinterface',
-              'default_filename': 'index.html'}),
-            ('/coverage/(.*)', tornado.web.StaticFileHandler,
-                {'path': 'htmlcov', 'default_filename': 'index.html'})]))
-    return socket_server, http_server
+            # ('/API-http/(.*)', HttpAPIHandler),
+            # # Below are features useful during development
+            # ('/APItestSuite/(.*)', tornado.web.StaticFileHandler,
+            #  {'path': 'test_tools/webinterface',
+            #   'default_filename': 'index.html'}),
+            # ('/coverage/(.*)', tornado.web.StaticFileHandler,
+            #     {'path': 'htmlcov', 'default_filename': 'index.html'})
+        ]))
+    return http_server
 
 
-class NMS:
+class Backend:
     '''
     Single server instance.
     '''
@@ -132,42 +129,37 @@ class NMS:
         setup_logging()
         setup_signal_handling()
         setup_database()
-        socket_server, http_server = setup_server()
+        http_server = setup_server()
 
         # Start servers
-        # Start Socket server
-        logging.info("Launching socket listener")
-        socket_server.listen(config.get('server', 'tcpport'),
-                             config.get('server', 'listen'))
 
         # Prepare HTTP server
         ioloop = tornado.ioloop.IOLoop.instance()
-        scheduled_notifications_watchdog(ioloop)
 
         http_server.listen(config.get('server',  'webport'))
-        logging.info("Launching Websocket and HTTP POST listeners")
+        logging.info("Launching Websocket listener")
         ioloop.start()
 
 
-class NMS_Daemon(Daemon):
+class Backend_Daemon(Daemon):
     '''
-    Daemon wrapper around MCS server. Using this allows us to also launch the
+    Daemon wrapper around Backend server. Using this allows us to also launch the
     server in non-daemon mode, which is useful during development.
     '''
     def run(self):
-        server = NMS()
+        server = Backend()
         server.run()
 
 
 def main():
-    if __file__ != 'source/server_nms.py':
-        print("The server needs to be run from the NMS root directory " +
-              "(e.g. NMS/). It is\nadvisable to use the nms.sh script " +
+    if __file__ != 'source/server_iot.py':
+        print("The server needs to be run from the root directory. " +
+              "It is\nadvisable to use the iot.sh script " +
               "that is provided there.")
         sys.exit(2)
 
     if len(sys.argv) == 2:
-        daemon = NMS_Daemon('/tmp/nms.pid')
+        daemon = Backend_Daemon('/tmp/iot.pid')
         if 'start' == sys.argv[1]:
             print("Starting server")
             daemon.start()
@@ -183,7 +175,7 @@ def main():
             sys.exit(2)
         sys.exit(0)
     else:
-        server = NMS()
+        server = Backend()
         server.run()
 
 
