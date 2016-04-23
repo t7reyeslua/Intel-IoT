@@ -177,7 +177,7 @@ def main_loop(ioloop):
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
                 for chord_ind in range (0,15):
-                    print myBuzzer.playSound(chords[chord_ind], 100000)
+                    # print myBuzzer.playSound(chords[chord_ind], 100000)
                     print "buzzing"
                     #time.sleep(0.1)
                     #chord_ind = (chord_ind + 1) % 2

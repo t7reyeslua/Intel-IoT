@@ -402,7 +402,7 @@ class IoTWebSocketClient(WebSocketClient):
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
 
     def print_lcd_message(self, message):
-        from main import myLcd
+        global myLcd
         line1 = message['line1']
         line2 = message['line2']
         is_error = message['is_error']
