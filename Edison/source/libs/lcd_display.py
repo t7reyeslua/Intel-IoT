@@ -37,6 +37,7 @@ def clear_display(myLcd):
     myLcd.write('                       ')
 
 def print_display(myLcd, line1, line2, is_error):
+    print("HOLA!")
     print(myLcd)
     print(line1)
     print(line2)

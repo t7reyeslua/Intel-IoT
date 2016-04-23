@@ -448,9 +448,9 @@ class IoTWebSocketClient(WebSocketClient):
 
 
         self.thisLCD.setCursor(0,0)
-        self.thisLCD.write(line1)
+        self.thisLCD.write(str(line1))
         self.thisLCD.setCursor(1,0)
-        self.thisLCD.write(line2)
+        self.thisLCD.write(str(line2))
 
         return
 
