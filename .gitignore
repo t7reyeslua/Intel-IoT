@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/*
+.coverage
+log/*
+docs/~*
+htmlcov/*
+*.swp
+pylint_reports/*
+.idea/
+docs/API/~$I_description.docx
