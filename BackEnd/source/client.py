@@ -43,16 +43,9 @@ class Client:
 
         :return: None
         '''
-        whitelisted_clients = config.get('clients', 'whitelist', fallback='')
-        whitelist = whitelisted_clients.split(',')
         self.name = self.host
         self.id = -1
-        if self.host in whitelist:
-            self.id = config.getint(self.name, 'id', fallback=-1)
-            expected_ip = config.get(self.name, 'ip', fallback=None)
-            if self.ip == expected_ip or (self.ip == '127.0.0.1'
-                                          and expected_ip == 'localhost'):
-                self.from_trusted_ip = True
+        self.from_trusted_ip = True
 
         logging.info("Client info loaded: %s, %s, %s, %s" %
                      (self.ip, self.host, self.id, self.from_trusted_ip))
