@@ -157,7 +157,7 @@ class IoTWebSocketClient(WebSocketClient):
         logging.info('IoT Connected! Conn:%s' % str(iot_connected))
         self.send_message('channel', 'setchannelmode',
                           {'channelmode': 'control',
-                           'clientname': 'SM' + str(randint(0,100))})
+                           'clientname': 'SB' + str(randint(0,100))})
         pool_tx = ThreadPool(processes=1)
         async_tx = pool_tx.apply_async(self.inspect_queue_for_messages, ())
 

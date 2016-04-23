@@ -29,12 +29,24 @@ bindings = [{'MAC': 123456, "ID": 1, "name": "shoe", "group": ["gym"]},
             {'MAC': 123456, "ID": 3, "name": "keys", "group": ["gym", "work"]},
             {'MAC': 123456, "ID": 4, "name": "laptop", "group": ["work"]}]
 
-def clear_display():
+def clear_display(myLcd):
     myLcd.setColor(0, 0, 0)
     myLcd.setCursor(0,0)
     myLcd.write('                       ')
     myLcd.setCursor(1,0)
     myLcd.write('                       ')
+
+def print_display(line1, line2, is_error):
+    if is_error == True:
+        myLcd.setColor(255, 0, 0)
+    else:
+        myLcd.setColor(0, 255, 0)
+
+    clear_display(myLcd)
+    myLcd.setCursor(0,0)
+    myLcd.write(line1)
+    myLcd.setCursor(1,0)
+    myLcd.write(line2)
 
 def update_display(scenario, ids_in_network):
     print "Scenario "+scenario
@@ -61,6 +73,7 @@ def update_display(scenario, ids_in_network):
         myLcd.write(" ".join(missing_items))
 
 # RGB Red
+
 
 if __name__ == "__main__":
     myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
