@@ -19,7 +19,6 @@ import re
 import pprint
 import datetime
 
-from libs.lcd_display import print_display
 
 DEFAULT_CONNECT_TIMEOUT = 60
 DEFAULT_REQUEST_TIMEOUT = 60
@@ -401,12 +400,35 @@ class IoTWebSocketClient(WebSocketClient):
                     channel = r.get_channel(r_channel)
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
 
+    def clear_display(self, myLcd):
+        myLcd.setColor(0, 0, 0)
+        myLcd.setCursor(0,0)
+        myLcd.write('                       ')
+        myLcd.setCursor(1,0)
+        myLcd.write('                       ')
+
+    def print_display(self, myLcd, line1, line2, is_error):
+        print(myLcd)
+        print(line1)
+        print(line2)
+        print(is_error)
+        if is_error == True:
+            myLcd.setColor(255, 0, 0)
+        else:
+            myLcd.setColor(0, 255, 0)
+
+        self.clear_display(myLcd)
+        myLcd.setCursor(0,0)
+        myLcd.write(line1)
+        myLcd.setCursor(1,0)
+        myLcd.write(line2)
+
     def print_lcd_message(self, message):
         global myLcd
         line1 = message['line1']
         line2 = message['line2']
         is_error = message['is_error']
-        print_display(myLcd, line1, line2, is_error)
+        self.print_display(myLcd, line1, line2, is_error)
         return
 
     def send_notification_to_final_user(self, message):
