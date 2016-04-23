@@ -107,6 +107,7 @@ def run_control_loop():
                 myBuzzer.stopSound()
                 xyz_count = 0
                 print outputStr
+        print outputStr
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0
