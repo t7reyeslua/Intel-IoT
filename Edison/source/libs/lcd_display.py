@@ -37,6 +37,10 @@ def clear_display(myLcd):
     myLcd.write('                       ')
 
 def print_display(myLcd, line1, line2, is_error):
+    print(myLcd)
+    print(line1)
+    print(line2)
+    print(is_error)
     if is_error == True:
         myLcd.setColor(255, 0, 0)
     else:
