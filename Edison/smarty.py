@@ -27,8 +27,8 @@ import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
 
 # global defines
-chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA, 
-          upmBuzzer.SOL, upmBuzzer.LA, upmBuzzer.SI, upmBuzzer.DO, 
+chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
+          upmBuzzer.SOL, upmBuzzer.LA, upmBuzzer.SI, upmBuzzer.DO,
           upmBuzzer.SI, upmBuzzer.LA,upmBuzzer.SOL,
           upmBuzzer.FA, upmBuzzer.MI,upmBuzzer.RE, upmBuzzer.DO];
 
@@ -48,8 +48,8 @@ def config_buzzer():
 def config_accelerometer():
     # Instantiate an MMA7660 on I2C bus 0
     myDigitalAccelerometer = upmMMA7660.MMA7660(
-				upmMMA7660.MMA7660_I2C_BUS, 
-				upmMMA7660.MMA7660_DEFAULT_I2C_ADDR);
+        upmMMA7660.MMA7660_I2C_BUS,
+        upmMMA7660.MMA7660_DEFAULT_I2C_ADDR);
 
 
     # Register exit handlers
@@ -84,16 +84,16 @@ def run_control_loop():
     xyz_count = 0
     # check shake for 5 sec
     for shake_slot in range (0, 15):
-	myDigitalAccelerometer.getRawValues(x, y, z)
-	outputStr = ("Raw values: x = {0}"
-	" y = {1}" 
-	" z = {2}").format(upmMMA7660.intp_value(x),
-	upmMMA7660.intp_value(y),
-	upmMMA7660.intp_value(z))
-        if (abs(upmMMA7660.intp_value(x)) > SHAKE_THRESHOLD) or\
-            (abs(upmMMA7660.intp_value(y)) > SHAKE_THRESHOLD) or\
-            (abs(upmMMA7660.intp_value(z)) > SHAKE_THRESHOLD):
-            print "value exceeded"    
+        myDigitalAccelerometer.getRawValues(x, y, z)
+        outputStr = ("Raw values: x = {0}"
+                     " y = {1}"
+                     " z = {2}").format(upmMMA7660.intp_value(x),
+                                        upmMMA7660.intp_value(y),
+                                        upmMMA7660.intp_value(z))
+        if (abs(upmMMA7660.intp_value(x)) > SHAKE_THRESHOLD) or \
+                (abs(upmMMA7660.intp_value(y)) > SHAKE_THRESHOLD) or \
+                (abs(upmMMA7660.intp_value(z)) > SHAKE_THRESHOLD):
+            print "value exceeded"
             print xyz_count
             xyz_count = xyz_count + 1
             if (xyz_count >= xyz_thresh):
@@ -106,9 +106,9 @@ def run_control_loop():
                     chord_ind += 1
                 buzzer.stopSound()
                 xyz_count = 0
-	        print outputStr
+                print outputStr
         time.sleep(0.05)
-    print "loop over"    
+    print "loop over"
     xyz_count = 0
 
 ###########################################

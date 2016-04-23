@@ -24,7 +24,10 @@
 import pyupm_i2clcd as lcd
 import time
 
-bindings = [{'MAC': 123456, "ID": 1, "name": "shoe", "group": ["gym"]},{'MAC': 123456, "ID": 2, "name": "earplugs", "group": ["gym","work"]}, {'MAC': 123456, "ID": 3, "name": "keys", "group": ["gym", "work"]}, {'MAC': 123456, "ID": 4, "name": "laptop", "group": ["work"]}]
+bindings = [{'MAC': 123456, "ID": 1, "name": "shoe", "group": ["gym"]},
+            {'MAC': 123456, "ID": 2, "name": "earplugs", "group": ["gym","work"]},
+            {'MAC': 123456, "ID": 3, "name": "keys", "group": ["gym", "work"]},
+            {'MAC': 123456, "ID": 4, "name": "laptop", "group": ["work"]}]
 
 def clear_display():
     myLcd.setColor(0, 0, 0)
