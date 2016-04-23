@@ -36,7 +36,7 @@ def clear_display(myLcd):
     myLcd.setCursor(1,0)
     myLcd.write('                       ')
 
-def print_display(line1, line2, is_error):
+def print_display(myLcd, line1, line2, is_error):
     if is_error == True:
         myLcd.setColor(255, 0, 0)
     else:
@@ -74,9 +74,12 @@ def update_display(scenario, ids_in_network):
 
 # RGB Red
 
+def config_lcd():
+    tlcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
+    return tlcd
 
 if __name__ == "__main__":
-    myLcd = lcd.Jhd1313m1(0, 0x3E, 0x62)
+    myLcd = config_lcd()
     # Initialize Jhd1313m1 at 0x3E (LCD_ADDRESS) and 0x62 (RGB_ADDRESS) 
     print "LCD Display TEST"
     update_display("work", [1,2,3,4])

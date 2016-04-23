@@ -8,9 +8,29 @@ from logging.handlers import RotatingFileHandler
 import sys
 import signal
 import os
+import time
 from config_handler import config
 from daemon import Daemon
 from iot_client import IoTWebSocketClient
+
+import pyupm_mma7660 as upmMMA7660
+import pyupm_buzzer as upmBuzzer
+
+# global defines
+chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
+          upmBuzzer.SOL, upmBuzzer.LA, upmBuzzer.SI, upmBuzzer.DO,
+          upmBuzzer.SI, upmBuzzer.LA,upmBuzzer.SOL,
+          upmBuzzer.FA, upmBuzzer.MI,upmBuzzer.RE, upmBuzzer.DO]
+
+x = upmMMA7660.new_intp()
+y = upmMMA7660.new_intp()
+z = upmMMA7660.new_intp()
+xyz_thresh = 1
+SHAKE_THRESHOLD = 30
+
+myBuzzer = None
+myDigitalAccelerometer = None
+myLcd = None
 
 def setup_logging():
     '''
@@ -118,6 +138,63 @@ def setup_iot_client():
     backend_client.connect(url=backend_url)
     return
 
+def setup_devices():
+    from libs.smarty import config_buzzer, config_accelerometer
+    from libs.lcd_display import config_lcd
+
+    global myBuzzer
+    global myDigitalAccelerometer
+    global myLcd
+
+    myBuzzer = config_buzzer()
+    myDigitalAccelerometer = config_accelerometer()
+    myLcd = config_lcd()
+    return
+
+def main_loop(ioloop):
+    '''
+    Main Loop
+
+    :param ioloop:  Tornado ioloop instance
+    '''
+
+    chord_ind = 0
+    xyz_count = 0
+    # check shake for 5 sec
+    for shake_slot in range (0, 15):
+        myDigitalAccelerometer.getRawValues(x, y, z)
+        outputStr = ("Raw values: x = {0}"
+                     " y = {1}"
+                     " z = {2}").format(upmMMA7660.intp_value(x),
+                                        upmMMA7660.intp_value(y),
+                                        upmMMA7660.intp_value(z))
+        if (abs(upmMMA7660.intp_value(x)) > SHAKE_THRESHOLD) or \
+                (abs(upmMMA7660.intp_value(y)) > SHAKE_THRESHOLD) or \
+                (abs(upmMMA7660.intp_value(z)) > SHAKE_THRESHOLD):
+            print "value exceeded"
+            print xyz_count
+            xyz_count = xyz_count + 1
+            if (xyz_count >= xyz_thresh):
+                print "increasing thresh"
+                for chord_ind in range (0,15):
+                    print myBuzzer.playSound(chords[chord_ind], 100000)
+                    print "buzzing"
+                    #time.sleep(0.1)
+                    #chord_ind = (chord_ind + 1) % 2
+                    chord_ind += 1
+                myBuzzer.stopSound()
+                xyz_count = 0
+                print outputStr
+        time.sleep(0.05)
+    print "loop over"
+    xyz_count = 0
+
+    # Schedule next
+    callback_time = 0
+    ioloop.call_at(ioloop.time() + callback_time,
+                   main_loop, ioloop)
+    return
+
 class SmartBag:
     '''
     Single instance.
@@ -133,6 +210,8 @@ class SmartBag:
 
         ioloop = tornado.ioloop.IOLoop.instance()
         setup_iot_client()
+        setup_devices()
+        main_loop(ioloop)
         ioloop.start()
 
 

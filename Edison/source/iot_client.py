@@ -19,6 +19,9 @@ import re
 import pprint
 import datetime
 
+from main import myLcd
+from libs.lcd_display import print_display
+
 DEFAULT_CONNECT_TIMEOUT = 60
 DEFAULT_REQUEST_TIMEOUT = 60
 
@@ -378,6 +381,8 @@ class IoTWebSocketClient(WebSocketClient):
         try:
             if handler == 'control' and msgtype == 'notification':
                 response = self.send_notification_to_final_user(data)
+            elif handler == 'control' and msgtype == 'print_message':
+                response = self.print_lcd_message(data)
         except Exception:
             logging.error('Unknown exception while handling notification ' +
                           'from IoT')
@@ -396,6 +401,13 @@ class IoTWebSocketClient(WebSocketClient):
                 for r in r_receivers:
                     channel = r.get_channel(r_channel)
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
+
+    def print_lcd_message(self, message):
+        line1 = message['line1']
+        line2 = message['line2']
+        is_error = message['is_error']
+        print_display(myLcd, line1, line2, is_error)
+        return
 
     def send_notification_to_final_user(self, message):
         '''

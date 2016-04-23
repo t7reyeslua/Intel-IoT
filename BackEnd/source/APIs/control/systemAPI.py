@@ -35,9 +35,27 @@ def handle_list_available_bags(client, msgid, msg, user):
             data['clients'].append(elem)
     return ('control', None, 'available_clients', data, msgid)
 
-def handle_report_missing_item(client, msgid, msg, user):
+def handle_report_missing_item(client, msgid, message, user):
+    receivers = []
+    if 'target' in message:
+        target = client_module.find_client(message['target'])
+        if target is None:
+            return ('control', None, 'error',
+                    {'msg': 'no such client'}, msgid)
+        receivers.append(target)
 
-    return
+    data = dict()
+    if client is not None:
+        data['sender'] = client.ip
+    if 'line1' in message:
+        data['line1'] = message['line1']
+    if 'line2' in message:
+        data['line2'] = message['line2']
+    if 'is_error' in message:
+        data['is_error'] = message['is_error']
+
+    return ('control', receivers, 'print_message', data, None)
+
 
 def handle_set_tracking_place(client, msgid, msg, user):
 

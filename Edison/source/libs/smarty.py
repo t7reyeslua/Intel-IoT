@@ -30,7 +30,7 @@ import pyupm_buzzer as upmBuzzer
 chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
           upmBuzzer.SOL, upmBuzzer.LA, upmBuzzer.SI, upmBuzzer.DO,
           upmBuzzer.SI, upmBuzzer.LA,upmBuzzer.SOL,
-          upmBuzzer.FA, upmBuzzer.MI,upmBuzzer.RE, upmBuzzer.DO];
+          upmBuzzer.FA, upmBuzzer.MI,upmBuzzer.RE, upmBuzzer.DO]
 
 x = upmMMA7660.new_intp()
 y = upmMMA7660.new_intp()
@@ -99,12 +99,12 @@ def run_control_loop():
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
                 for chord_ind in range (0,15):
-                    print buzzer.playSound(chords[chord_ind], 100000)
+                    print myBuzzer.playSound(chords[chord_ind], 100000)
                     print "buzzing"
                     #time.sleep(0.1)
                     #chord_ind = (chord_ind + 1) % 2
                     chord_ind += 1
-                buzzer.stopSound()
+                myBuzzer.stopSound()
                 xyz_count = 0
                 print outputStr
         time.sleep(0.05)
@@ -115,7 +115,7 @@ def run_control_loop():
 #instantiate all sensors
 ##########################################
 print "initializing the sensors"
-buzzer = config_buzzer()
+myBuzzer = config_buzzer()
 myDigitalAccelerometer = config_accelerometer()
 
 print "entering control loop"
@@ -123,4 +123,4 @@ while (1):
     run_control_loop()
 
 # Delete the buzzer object
-del buzzer
+del myBuzzer
