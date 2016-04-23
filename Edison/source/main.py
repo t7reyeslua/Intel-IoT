@@ -111,11 +111,9 @@ def setup_iot_client():
     Setup the client for the NMS
     '''
     backend_url = 'ws://%s:%s/API-ws/' % (config.get('backend',
-                                                 'localhost',
-                                                 fallback='localhost'),
+                                                 'localhost'),
                                       config.getint('backend',
-                                                    'webport',
-                                                    fallback=8878))
+                                                    'webport'))
     backend_client = IoTWebSocketClient()
     backend_client.connect(url=backend_url)
     return
