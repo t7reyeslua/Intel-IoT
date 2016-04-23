@@ -206,7 +206,7 @@ class IoTWebSocketClient(WebSocketClient):
                 if iot_connected:
                     tx_message = message_queue.get(block=True, timeout=5)
                     if tx_message:
-                        self.send_message('control', 'send_notification',
+                        self.send_message('control', 'report_missing_item',
                                           tx_message)
                     else:
                         raise Empty

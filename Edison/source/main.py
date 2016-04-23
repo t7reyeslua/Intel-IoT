@@ -11,7 +11,7 @@ import os
 import time
 from config_handler import config
 from daemon import Daemon
-from iot_client import IoTWebSocketClient
+from iot_client import IoTWebSocketClient, enqueue_message
 
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
@@ -131,9 +131,9 @@ def setup_iot_client():
     Setup the client for the NMS
     '''
     backend_url = 'ws://%s:%s/API-ws/' % (config.get('backend',
-                                                 'host'),
-                                      config.getint('backend',
-                                                    'webport'))
+                                                     'host'),
+                                          config.getint('backend',
+                                                        'webport'))
     backend_client = IoTWebSocketClient()
     backend_client.connect(url=backend_url)
     return
@@ -183,8 +183,12 @@ def main_loop(ioloop):
                     #chord_ind = (chord_ind + 1) % 2
                     chord_ind += 1
                 myBuzzer.stopSound()
+                data = create_message('Alert!', 'Missing item', True,
+                                      '127.0.0.1')
+                enqueue_message(data)
                 xyz_count = 0
                 print outputStr
+
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0
@@ -194,6 +198,13 @@ def main_loop(ioloop):
     ioloop.call_at(ioloop.time() + callback_time,
                    main_loop, ioloop)
     return
+
+def create_message(line1, line2, is_error, target):
+    msg = {'line1': line1,
+           'line2': line2,
+           'is_error': is_error,
+           'target': target}
+    return msg
 
 class SmartBag:
     '''
