@@ -211,7 +211,7 @@ class SmartBag:
         ioloop = tornado.ioloop.IOLoop.instance()
         setup_iot_client()
         setup_devices()
-        main_loop(ioloop)
+        # main_loop(ioloop)
         ioloop.start()
 
 
