@@ -42,7 +42,7 @@ def config_buzzer():
     # Create the buzzer object using GPIO pin 5
     buzzer = upmBuzzer.Buzzer(5)
     buzzer.stopSound()
-    #buzzer.setVolume(1)
+    buzzer.setVolume(0)
     return buzzer
 
 def config_accelerometer():
