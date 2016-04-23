@@ -32,7 +32,7 @@ class WebSocketClient():
     Base for web socket clients.
     """
 
-    def __init__(self, *, connect_timeout=DEFAULT_CONNECT_TIMEOUT,
+    def __init__(self, connect_timeout=DEFAULT_CONNECT_TIMEOUT,
                  request_timeout=DEFAULT_REQUEST_TIMEOUT):
         logging.info('Initializing WebSocketClient instance')
         self.connect_timeout = connect_timeout
