@@ -34,6 +34,9 @@ myBuzzer = None
 myDigitalAccelerometer = None
 myLcd = None
 
+btscan_status_available = 0
+scan_for_bt_nodes = 1
+
 def setup_logging():
     '''
     Create logging based on settings in server.config. At least log to a
@@ -165,7 +168,26 @@ def clear_lcd_screen(ioloop):
     callback_time = 0
     ioloop.call_at(ioloop.time() + callback_time,
                    clear_lcd_screen, ioloop)
-    
+
+def scan_bluetooth_nodes(ioloop):
+     devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name':
+                    'cellphone0'},
+                           {'id': 1, 'mac': "5C:E8:EB:7B:87:45", 'name':
+                               'cellphone1'}]
+
+	 global missing_devices
+
+	 if (scan_for_bt_nodes == 1):					   
+         missing_devices = check_devices(devices)
+		 # do not scan for nodes again until further request
+		 scan_for_bt_nodes = 0
+		 btscan_status_available = 1
+
+     callback_time = 0
+     ioloop.call_at(ioloop.time() + callback_time,
+                   scan_bluetooth_nodes, ioloop)
+
+
 def main_loop(ioloop):
     '''
     Main Loop
@@ -191,25 +213,24 @@ def main_loop(ioloop):
             xyz_count = xyz_count + 1
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
-                devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                    'cellphone0'},
-                           {'id': 1, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                               'cellphone1'}]
-                missing_devices = check_devices(devices)
-                if len(missing_devices) > 0:
-                    print "Missing devices"+"\n"
-                    print missing_devices
-                    for chord_ind in range (0,15):
-                        print myBuzzer.playSound(chords[chord_ind], 100000)
-                        print "buzzing"
-                        #time.sleep(0.1)
-                        chord_ind += 1
-                    data = create_message('Alert!', 'Missing item', True,
+                if (btscan_status_available == 1)
+				    # trigger the bluetooth device scanner again to update the
+					# status of devices
+                    if len(missing_devices) > 0:
+                        print "Missing devices"+"\n"
+                        print missing_devices
+                        for chord_ind in range (0,15):
+                            print myBuzzer.playSound(chords[chord_ind], 100000)
+                            print "buzzing"
+                            #time.sleep(0.1)
+                            chord_ind += 1
+                        data = create_message('Alert!', 'Missing item', True,
                                       '127.0.0.1')
-                    enqueue_message(data)
-                myBuzzer.stopSound()
-                xyz_count = 0
-                print outputStr
+                        enqueue_message(data)
+                    myBuzzer.stopSound()
+                    xyz_count = 0
+                    print outputStr
+                    scan_for_bt_nodes = 1
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0
@@ -243,6 +264,7 @@ class SmartBag:
         ioloop = tornado.ioloop.IOLoop.instance()
         setup_iot_client()
         setup_devices()
+        scan_bluetooth_nodes(ioloop)
         main_loop(ioloop)
         clear_lcd_screen(ioloop)
         ioloop.start()
