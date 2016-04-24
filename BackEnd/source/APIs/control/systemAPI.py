@@ -57,9 +57,19 @@ def handle_report_missing_item(client, msgid, message, user):
     return ('control', receivers, 'print_message', data, None)
 
 
-def handle_set_tracking_place(client, msgid, msg, user):
+def handle_set_tracking_place(client, msgid, message, user):
+    receivers = []
+    if 'target' in message:
+        target = client_module.find_client(message['target'])
+        if target is None:
+            return ('control', None, 'error',
+                    {'msg': 'no such client'}, msgid)
+        receivers.append(target)
 
-    return
+    data = dict()
+    data['tags'] = message['tags']
+
+    return ('control', receivers, 'track_articles', data, None)
 
 def handle_create_beacon_configuration(client, msgid, msg, user):
 
