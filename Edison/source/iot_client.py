@@ -154,7 +154,8 @@ class IoTWebSocketClient(WebSocketClient):
         """
         from random import randint
         global iot_connected
-        self.thisLCD = lcd.Jhd1313m1(0, 0x3E, 0x62)
+        if (prefs.getboolean("defaults", "lcd_en")):
+            self.thisLCD = lcd.Jhd1313m1(0, 0x3E, 0x62)
         iot_connected = True
         logging.info('IoT Connected! Conn:%s' % str(iot_connected))
         self.send_message('channel', 'setchannelmode',
@@ -381,7 +382,8 @@ class IoTWebSocketClient(WebSocketClient):
             if handler == 'control' and msgtype == 'notification':
                 response = self.send_notification_to_final_user(data)
             elif handler == 'control' and msgtype == 'print_message':
-                response = self.print_lcd_message(data)
+                if (prefs.getboolean("defaults", "lcd_en")):
+                    response = self.print_lcd_message(data)
         except Exception as e:
             logging.error('Unknown exception while handling notification ' +
                           'from IoT')

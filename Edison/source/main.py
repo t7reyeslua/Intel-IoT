@@ -12,6 +12,7 @@ import time
 from config_handler import config
 from daemon import Daemon
 from iot_client import IoTWebSocketClient, enqueue_message
+from config_handler import config, prefs
 
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
@@ -149,10 +150,12 @@ def setup_devices():
     global myLcd
     global myButton
 
-    myBuzzer = config_buzzer()
-    myDigitalAccelerometer = config_accelerometer()
-    myLcd = config_lcd()
-    myButton = grove.GroveButton(7)
+    if (prefs.getboolean("defaults", "buzzer_en")):
+        myBuzzer = config_buzzer()
+        myDigitalAccelerometer = config_accelerometer()
+    if (prefs.getboolean("defaults", "lcd_en")):
+        myLcd = config_lcd()
+        myButton = grove.GroveButton(7)
     return
 
 def clear_lcd_screen(ioloop):
@@ -205,7 +208,7 @@ def main_loop(ioloop):
                         #time.sleep(0.1)
                         chord_ind += 1
                     data = create_message('Alert!', 'Missing item', True,
-                                      '127.0.0.1')
+                                      '10.10.106.163')
                     enqueue_message(data)
                 myBuzzer.stopSound()
                 xyz_count = 0
@@ -243,8 +246,10 @@ class SmartBag:
         ioloop = tornado.ioloop.IOLoop.instance()
         setup_iot_client()
         setup_devices()
-        main_loop(ioloop)
-        clear_lcd_screen(ioloop)
+        if (prefs.getboolean("defaults", "buzzer_en")):
+            main_loop(ioloop)
+        if (prefs.getboolean("defaults", "lcd_en")):
+            clear_lcd_screen(ioloop)
         ioloop.start()
 
 
