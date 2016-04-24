@@ -15,7 +15,7 @@ from iot_client import IoTWebSocketClient, enqueue_message
 
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
-import bluescan
+from libs.bluescan import check_devices
 
 # global defines
 chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
@@ -179,21 +179,21 @@ def main_loop(ioloop):
                 print "increasing thresh"
                 devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name':
                     'cellphone0'},
-                           {'id': 1, 'mac': "00:00:00:00:00:00", 'name':
+                           {'id': 1, 'mac': "5C:E8:EB:7B:87:45", 'name':
                                'cellphone1'}]
-                missing_devices = bluescan.check_devices(devices)
+                missing_devices = check_devices(devices)
                 if len(missing_devices) > 0:
-                    print "Missing devices"+"\n".join(missing_devices)
+                    print "Missing devices"+"\n"
+                    print missing_devices
                     for chord_ind in range (0,15):
                         print myBuzzer.playSound(chords[chord_ind], 100000)
                         print "buzzing"
                         #time.sleep(0.1)
-                        #chord_ind = (chord_ind + 1) % 2
                         chord_ind += 1
-                myBuzzer.stopSound()
-                data = create_message('Alert!', 'Missing item', True,
+                    data = create_message('Alert!', 'Missing item', True,
                                       '127.0.0.1')
-                enqueue_message(data)
+                    enqueue_message(data)
+                myBuzzer.stopSound()
                 xyz_count = 0
                 print outputStr
         time.sleep(0.05)
