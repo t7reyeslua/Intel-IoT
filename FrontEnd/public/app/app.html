@@ -1,5 +1,38 @@
-<div class="row">
-  <div class="col-xs-2">
-    <button class="form-control btn btn-default"><span class="glyphicon glyphicon-thumbs-up"></span> Hello World!</button>
+<div class="col-md-3 col-md-offset-5">
+  <div class="well">
+    <h3>Scenarios</h3>
+    <form role="form" class="settings" ng-submit="">
+
+
+      <div class="form-group">
+        <label style="padding: 10px;">Gym</label>
+        <i class="fa fa-toggle-on active"
+           ng-if="status_gym == true"
+           ng-click="changeStatusGym();">
+        </i>
+        <i class="fa fa-toggle-on fa-rotate-180 inactive"
+           ng-if="status_gym == false"
+           ng-click="changeStatusGym();">
+        </i>
+      </div>
+
+
+      <div class="form-group">
+
+        <label style="padding: 10px;">Work</label>
+        <i class="fa fa-toggle-on active"
+           ng-if="status_work == true"
+           ng-click="changeStatusWork();">
+        </i>
+        <i class="fa fa-toggle-on fa-rotate-180 inactive"
+           ng-if="status_work == false"
+           ng-click="changeStatusWork();">
+        </i>
+      </div>
+
+      <div class="form-group" align="right">
+        <button type="submit" class="btn btn-danger">Send</button>
+      </div>
+    </form>
   </div>
 </div>
