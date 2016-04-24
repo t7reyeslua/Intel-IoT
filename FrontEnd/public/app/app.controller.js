@@ -56,7 +56,7 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
         if ($scope.item4['work'] == true) { tracked_tags.push($scope.tag4);}
 
     }
-    
+
     data['target'] = $scope.smartBagIP
     data['tags'] = tracked_tags
     console.log(data);
