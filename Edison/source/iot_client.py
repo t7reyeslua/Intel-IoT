@@ -39,6 +39,7 @@ class WebSocketClient():
         logging.info('Initializing WebSocketClient instance')
         self.connect_timeout = connect_timeout
         self.request_timeout = request_timeout
+        self.devices = []
 
     def connect(self, io_loop=None, url=None):
         """
@@ -407,15 +408,35 @@ class IoTWebSocketClient(WebSocketClient):
                     channel = r.get_channel(r_channel)
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
 
+    def getDevices(self):
+        if self.devices == None:
+            self.devices = []
+        return self.devices
+    
+    def decodeUTF(self, l):
+        ll = []
+	for d in l:
+		t = dict()
+        	for key in d:
+           		if key == 'id':
+           			t[str(key)] = int(d[key])
+           		t[str(key)] = str(d[key])
+        	print t
+                ll.append(t)           
+    	return ll
+
     def update_tracked_tags(self, data):
-        global devices
-        devices = data['tags']
+        
+        self.devices = self.decodeUTF(data['tags'])
 
-        for i in range(len(devices)):
-            for m,n in devices[i].iteritems():
-                devices[i][m] = int[n] if m == "id" else str(n)
-                print(devices[i][m])
-
+        #for i in range(len(self.devices)):
+         #   for m,n in self.devices[i].iteritems():
+                 
+          #       self.devices[i][m.decode('UTF8')] = int(n) if m == 
+#"id" else str(n)
+           #     print(devices[i][m])
+        print "fff"
+        print self.devices
         return
 
     def clear_display(self, myLcd):

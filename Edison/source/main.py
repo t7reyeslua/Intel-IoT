@@ -139,7 +139,7 @@ def setup_iot_client():
                                                         'webport'))
     backend_client = IoTWebSocketClient()
     backend_client.connect(url=backend_url)
-    return
+    return backend_client
 
 def setup_devices():
     from libs.smarty import config_buzzer, config_accelerometer
@@ -169,13 +169,13 @@ def clear_lcd_screen(ioloop):
     ioloop.call_at(ioloop.time() + callback_time,
                    clear_lcd_screen, ioloop)
 
-def main_loop(ioloop):
+def main_loop(ioloop, iot_client):
     '''
     Main Loop
 
     :param ioloop:  Tornado ioloop instance
     '''
-    global devices
+    devices = iot_client.getDevices()
     chord_ind = 0
     xyz_count = 0
     # check shake for 5 sec
@@ -204,7 +204,7 @@ def main_loop(ioloop):
                         #time.sleep(0.1)
                         chord_ind += 1
                     data = create_message('Alert!', 'Missing item', True,
-                                      '10.10.106.163')
+                                      '10.10.40.3')
                     enqueue_message(data)
                 myBuzzer.stopSound()
                 xyz_count = 0
@@ -216,7 +216,7 @@ def main_loop(ioloop):
     # Schedule next
     callback_time = 0
     ioloop.call_at(ioloop.time() + callback_time,
-                   main_loop, ioloop)
+                   main_loop, ioloop, iot_client)
     return
 
 def create_message(line1, line2, is_error, target):
@@ -240,10 +240,10 @@ class SmartBag:
         setup_signal_handling()
 
         ioloop = tornado.ioloop.IOLoop.instance()
-        setup_iot_client()
+        iot_client = setup_iot_client()
         setup_devices()
         if (prefs.getboolean("defaults", "buzzer_en")):
-            main_loop(ioloop)
+            main_loop(ioloop, iot_client)
         if (prefs.getboolean("defaults", "lcd_en")):
             clear_lcd_screen(ioloop)
         ioloop.start()
