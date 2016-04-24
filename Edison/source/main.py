@@ -15,6 +15,7 @@ from iot_client import IoTWebSocketClient, enqueue_message
 
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
+import pyupm_grove as grove
 from libs.bluescan import check_devices
 
 # global defines
@@ -146,12 +147,25 @@ def setup_devices():
     global myBuzzer
     global myDigitalAccelerometer
     global myLcd
+    global myButton
 
     myBuzzer = config_buzzer()
     myDigitalAccelerometer = config_accelerometer()
     myLcd = config_lcd()
+    myButton = grove.GroveButton(7)
     return
 
+def clear_lcd_screen(ioloop):
+    from libs.lcd_display import clear_display
+    if(myButton.value() == 1):
+        print myButton.name(), ' value is ', myButton.value()
+        clear_display(myLcd)
+    time.sleep(0.5)
+    # Schedule next
+    callback_time = 0
+    ioloop.call_at(ioloop.time() + callback_time,
+                   clear_lcd_screen, ioloop)
+    
 def main_loop(ioloop):
     '''
     Main Loop
@@ -230,6 +244,7 @@ class SmartBag:
         setup_iot_client()
         setup_devices()
         main_loop(ioloop)
+        clear_lcd_screen(ioloop)
         ioloop.start()
 
 
