@@ -195,10 +195,6 @@ def main_loop(ioloop):
             xyz_count = xyz_count + 1
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
-                devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                            'cellphone0'},
-                           {'id': 1, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                            'cellphone1'}]
                 missing_devices = check_devices(devices)
                 if len(missing_devices) > 0:
                     print "Missing devices"+"\n"

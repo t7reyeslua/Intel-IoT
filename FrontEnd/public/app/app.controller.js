@@ -15,10 +15,10 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
   ]
 
   $scope.smartBagIP = '127.0.0.1'
-  $scope.tag1 = {'id': 1, 'name': 'Tennis', 'mac': 'MAC:1:1:1'}
-  $scope.tag2 = {'id': 2, 'name': 'Wallet', 'mac': 'MAC:1:1:2'}
-  $scope.tag3 = {'id': 3, 'name': 'Keys', 'mac': 'MAC:1:1:3'}
-  $scope.tag4 = {'id': 4, 'name': 'Towel', 'mac': 'MAC:1:1:4'}
+  $scope.tag1 = {'id': 1, 'name': 'Tennis', 'mac': '5C:E8:EB:7B:87:45'}
+  $scope.tag2 = {'id': 2, 'name': 'Wallet', 'mac': '8C:3A:E3:FF:0A:88'}
+  $scope.tag3 = {'id': 3, 'name': 'Keys', 'mac': 'C0:EE:FB:32:E4:84'}
+  $scope.tag4 = {'id': 4, 'name': 'Towel', 'mac': 'C0:EE:FB:32:E4:84'}
 
   $scope.changeStatusGym = function(){
     $scope.status_gym = !$scope.status_gym;
