@@ -22,7 +22,7 @@ function openWS($websocket, $rootScope) {
     var rnd = Math.floor((Math.random() * 100) + 1);
     $rootScope.clientIoT = 'WebClient' + rnd.toString();
 
-    var WS_URL = "ws://" + "localhost" + ":8878/API-ws/";
+    var WS_URL = "ws://" + "10.10.40.4" + ":8878/API-ws/";
     var ws = $websocket.$new({
         url: WS_URL, channelType: 'control', clientName: $rootScope.clientIoT
     });
