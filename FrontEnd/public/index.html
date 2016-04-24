@@ -1,21 +1,52 @@
 <!DOCTYPE html>
 <html ng-app ="myApp">
-    <head>
-        <title>Bag-IoT</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="stylesheet" href="lib/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="lib/css/animate.css" />
+<head>
+    <title>Bag-IoT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="lib/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/css/animate.css" />
+    <link rel="stylesheet" href="lib/css/material.css" />
+    <link rel="stylesheet" href="lib/css/ripples.css" />
+    <link rel="stylesheet" href="lib/font-awesome-4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="lib/css/styles.css" />
 
-        <script type='text/javascript' src="lib/moment.js" charset="UTF-8"></script>
-        <script type='text/javascript' src="lib/lodash.min.js" charset="UTF-8"></script>
-        <script type='text/javascript' src="lib/angular.min.js" charset="UTF-8"></script>
-        <script type='text/javascript' src="lib/angular-sanitize.min.js" charset="UTF-8"></script>
-        <script type='text/javascript' src="lib/angular-ui-router.js" charset="UTF-8"></script>
+    <!--<link href="http://fonts.googleapis.com/css?family=Lato:100italic,100,300italic,300,400italic,400,700italic,700,900italic,900" rel="stylesheet" type="text/css">
+-->
+    <script type="text/javascript" src='lib/jquery/dist/jquery.js'></script>
+    <script type="text/javascript" src='lib/bootstrap/dist/js/bootstrap.js'></script>
+    <script type="text/javascript" src='lib/bootstrap-material-design/dist/js/material.js'></script>
+    <script type="text/javascript" src='lib/bootstrap-material-design/dist/js/ripples.js'></script>
+    <script type="text/javascript" src='lib/angular-1.4.8/angular.js'></script>
 
-        <script type='text/javascript' src="app.js" charset="UTF-8"></script>
-        <script type='text/javascript' src="app/app.controller.js" charset="UTF-8"></script>
-    </head>
-    <body>
-        <div class="container" ui-view=""></div>
-    </body>
+    <script type="text/javascript" src='lib/angular-1.4.8/angular-route.js'></script>
+    <script type="text/javascript" src='lib/angular-1.4.8/angular-cookies.js'></script>
+
+    <script type='text/javascript' src="lib/moment.js" charset="UTF-8"></script>
+    <script type='text/javascript' src="lib/lodash.min.js" charset="UTF-8"></script>
+    <!--<script type='text/javascript' src="lib/angular.min.js" charset="UTF-8"></script>-->
+    <!--<script type='text/javascript' src="lib/angular-sanitize.min.js" charset="UTF-8"></script>-->
+    <script type='text/javascript' src="lib/angular-ui-router.js" charset="UTF-8"></script>
+    <script type='text/javascript' src="lib/ng-websocket/ng-websocket.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="lib/ui-bootstrap/ui-bootstrap-0.14.3.js"></script>
+
+    <script type='text/javascript' src="app.js" charset="UTF-8"></script>
+    <script type='text/javascript' src="app/app.controller.js" charset="UTF-8"></script>
+</head>
+<body style="background-color: #2a2a2a;">
+<!--<div class="container-fluid" ui-view=""></div>-->
+<div class="jumbotron" style="background-color:brown; color: #fff;
+background-image: url(banner.jpg);
+background-size: cover;
+height:150px;">
+
+</div>
+<div class="inner-content" style="padding: 15px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12" ui-view=""></div>
+
+        </div>
+    </div>
+</div>
+</body>
 </html>

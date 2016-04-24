@@ -25,6 +25,7 @@
 import time, sys, signal, atexit
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
+import bluescan
 
 # global defines
 chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
@@ -98,16 +99,22 @@ def run_control_loop():
             xyz_count = xyz_count + 1
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
-                for chord_ind in range (0,15):
-                    print myBuzzer.playSound(chords[chord_ind], 100000)
-                    print "buzzing"
-                    #time.sleep(0.1)
-                    #chord_ind = (chord_ind + 1) % 2
-                    chord_ind += 1
-                myBuzzer.stopSound()
-                xyz_count = 0
-                print outputStr
-        print outputStr
+		devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name': 
+'cellphone0'},
+               {'id': 1, 'mac': "00:00:00:00:00:00", 'name': 
+'cellphone1'}]
+		missing_devices = bluescan.check_devices(devices)
+		if len(missing_devices) > 0:
+		    print "Missing devices"+"\n".join(missing_devices)
+		    for chord_ind in range (0,15):
+		        print myBuzzer.playSound(chords[chord_ind], 100000)
+			print "buzzing"
+			#time.sleep(0.1)
+			#chord_ind = (chord_ind + 1) % 2
+			chord_ind += 1
+		myBuzzer.stopSound()
+		xyz_count = 0
+		print outputStr
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0

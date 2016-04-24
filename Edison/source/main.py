@@ -12,9 +12,12 @@ import time
 from config_handler import config
 from daemon import Daemon
 from iot_client import IoTWebSocketClient, enqueue_message
+from config_handler import config, prefs
 
 import pyupm_mma7660 as upmMMA7660
 import pyupm_buzzer as upmBuzzer
+import pyupm_grove as grove
+from libs.bluescan import check_devices
 
 # global defines
 chords = [upmBuzzer.DO, upmBuzzer.RE, upmBuzzer.MI, upmBuzzer.FA,
@@ -145,11 +148,26 @@ def setup_devices():
     global myBuzzer
     global myDigitalAccelerometer
     global myLcd
+    global myButton
 
-    myBuzzer = config_buzzer()
-    myDigitalAccelerometer = config_accelerometer()
-    myLcd = config_lcd()
+    if (prefs.getboolean("defaults", "buzzer_en")):
+        myBuzzer = config_buzzer()
+        myDigitalAccelerometer = config_accelerometer()
+    if (prefs.getboolean("defaults", "lcd_en")):
+        myLcd = config_lcd()
+        myButton = grove.GroveButton(7)
     return
+
+def clear_lcd_screen(ioloop):
+    from libs.lcd_display import clear_display
+    if(myButton.value() == 1):
+        print myButton.name(), ' value is ', myButton.value()
+        clear_display(myLcd)
+    time.sleep(0.5)
+    # Schedule next
+    callback_time = 0
+    ioloop.call_at(ioloop.time() + callback_time,
+                   clear_lcd_screen, ioloop)
 
 def main_loop(ioloop):
     '''
@@ -157,7 +175,7 @@ def main_loop(ioloop):
 
     :param ioloop:  Tornado ioloop instance
     '''
-
+    global devices
     chord_ind = 0
     xyz_count = 0
     # check shake for 5 sec
@@ -176,19 +194,21 @@ def main_loop(ioloop):
             xyz_count = xyz_count + 1
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
-                for chord_ind in range (0,15):
-                    # print myBuzzer.playSound(chords[chord_ind], 100000)
-                    print "buzzing"
-                    #time.sleep(0.1)
-                    #chord_ind = (chord_ind + 1) % 2
-                    chord_ind += 1
+                missing_devices = check_devices(devices)
+                if len(missing_devices) > 0:
+                    print "Missing devices"+"\n"
+                    print missing_devices
+                    for chord_ind in range (0,15):
+                        print myBuzzer.playSound(chords[chord_ind], 100000)
+                        print "buzzing"
+                        #time.sleep(0.1)
+                        chord_ind += 1
+                    data = create_message('Alert!', 'Missing item', True,
+                                      '10.10.106.163')
+                    enqueue_message(data)
                 myBuzzer.stopSound()
-                data = create_message('Alert!', 'Missing item', True,
-                                      '127.0.0.1')
-                enqueue_message(data)
                 xyz_count = 0
                 print outputStr
-
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0
@@ -222,7 +242,10 @@ class SmartBag:
         ioloop = tornado.ioloop.IOLoop.instance()
         setup_iot_client()
         setup_devices()
-        main_loop(ioloop)
+        if (prefs.getboolean("defaults", "buzzer_en")):
+            main_loop(ioloop)
+        if (prefs.getboolean("defaults", "lcd_en")):
+            clear_lcd_screen(ioloop)
         ioloop.start()
 
 

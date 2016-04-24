@@ -1,0 +1,374 @@
+.sortable {
+    cursor: pointer;
+}
+.sortable:after {
+    content: url(data:image/gif;base64,R0lGODlhCwALAJEAAAAAAP///xUVFf///yH5BAEAAAMALAAAAAALAAsAAAIUnC2nKLnT4or00PvyrQwrPzUZshQAOw==);
+    padding-left: 1em;
+}
+.st-sort-ascent:after {
+    content: '\25B2';
+}
+.st-sort-descent:after {
+    content: '\25BC';
+}
+.st-selected{
+    border-left:4px solid #009688;
+}
+
+#cds-button, #cds-buttons {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+}
+.movie-selected-img {
+    width: 340px;
+    height: 500px;
+}
+.show-actor-img {
+    width: 150px;
+    height: 225px;
+}
+/*.feature-box h4:after {*/
+/*font-family: FontAwesome;*/
+/*content: '\f111';*/
+/*font-size: 10px;*/
+/*vertical-align: middle;*/
+/*padding-left: 4px;*/
+/*}*/
+.control-panel-link .feature-box .unknown:after,
+.control-panel-link .feature-box .unavailable:after,
+.control-panel-link .feature-box .available:after{
+    font-family: FontAwesome;
+    content: '\f111';
+    font-size: 20px;
+    vertical-align: middle;
+    padding-left: 4px;
+}
+.control-panel-link .feature-box .unavailable:after {
+    content: '\f057';
+    color: #DD5136;
+}
+
+.control-panel-link .feature-box .available:after {
+    content: '\f058';
+    color: #009688;
+}
+.control-panel-link .feature-box .unknown:after {
+    content: '\f059';
+}
+.control-panel-link .feature-box .unknown,
+.control-panel-link .feature-box .available,
+.control-panel-link .feature-box .unavailable{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 34px;
+    padding-top: 10px;
+}
+/* Desktop */
+@media
+only screen and (min-width: 1201px)
+{
+    .ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+        width: 1200px;
+        height: 650px;
+    }
+}
+@media /* iPhone 5*/
+only screen and (max-width: 335px)
+{
+    #cds-button {
+        position: relative;
+        padding-left:  calc(60% - (50% / 2));
+    }
+    #cds-buttons {
+        position: relative;
+        padding-left:  calc(37% - (50% / 2));
+    }
+    .ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+        width: 95%;
+        height: auto;
+    }
+    .movie-selected-img {
+        width: 170px;
+        height: 250px;
+    }
+    .editable-input.editable-has-buttons {
+        width: 95%;
+    }
+    .editable-wrap {
+        display: inline-block;
+        white-space: normal;
+        margin: 0;
+    }
+    .show-actor-img {
+        width: 75px;
+        height: 112px;
+    }
+    .show-actor-name {
+        display: inline-block; /* so height and width actually take affect */
+        max-width: 80%;
+        height: 1em; /* so overflow hidden works and keeps text on one row */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media /* iPhone 6 */
+only screen and (max-width: 500px)
+{
+    #cds-button {
+        position: relative;
+        padding-left:  calc(65% - (50% / 2));
+    }
+    #cds-buttons {
+        position: relative;
+        padding-left:  calc(45% - (50% / 2));
+    }
+    .ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+        width: 95%;
+        height: auto;
+    }
+    .movie-selected-img {
+        width: 170px;
+        height: 250px;
+    }
+    .editable-input.editable-has-buttons {
+        width: 95%;
+    }
+    .editable-wrap {
+        display: inline-block;
+        white-space: normal;
+        margin: 0;
+    }
+    .show-actor-img {
+        width: 75px;
+        height: 112px;
+    }
+    .show-actor-name {
+        display: inline-block; /* so height and width actually take affect */
+        max-width: 80%;
+        height: 1em; /* so overflow hidden works and keeps text on one row */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+/* iPad */
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : portrait)
+{
+    #cds-button {
+        position: relative;
+        padding-left:  76%;
+    }
+    #cds-buttons {
+        position: relative;
+        padding-left:  calc(55% - (50% / 2));
+    }
+    .ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+        width: 75%;
+        height: auto;
+    }
+
+    .editable-input.editable-has-buttons {
+        width: 95%;
+    }
+    .editable-wrap {
+        display: inline-block;
+        white-space: normal;
+        margin: 0;
+    }
+    .show-actor-img {
+        width: 120px;
+        height: 180px;
+    }
+}
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 1024px)
+and (orientation : landscape)
+{
+    .ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+        width: 95%;
+        height: 600px;
+    }
+    .ngdialog .container-fluid .row div {
+        padding-left: 0;
+    }
+    .editable-input.editable-has-buttons {
+        width: 95%;
+    }
+    .editable-wrap {
+        display: inline-block;
+        white-space: normal;
+        margin: 0;
+    }
+    .show-actor-img {
+        width: 135px;
+        height: 202px;
+    }
+    .movie-selected-img {
+        width: 290px;
+        height: 426px;
+    }
+
+}
+
+.modal_screen{
+    position: relative;
+}
+.modal_innerdiv {
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+}
+.editable-click {
+    color: black;
+    border-bottom: dashed 0px;
+}
+.editable-click:hover {
+    color: #83c6c3;
+    /*border-bottom: dotted 2px #83c6c3;*/
+    /*border-bottom-color: #83c6c3;*/
+}
+form .progress {
+    line-height: 15px;
+}
+.progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+}
+
+.progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+}
+.navbar {
+    background-color: #83c6c3;
+    /*background-color: #009688;*/
+    border: 0;
+    border-radius: 0;
+}
+.navbar.navbar,
+.navbar-default.navbar {
+    background-color: #83c6c3;
+    /*background-color: #009688;*/
+    color: rgba(255, 255, 255, 0.84);
+}
+.navbar-default.navbar .dropdown-menu li > a:focus {
+    color: #83c6c3;
+    /*color: #009688;*/
+    background-color: #eeeeee;
+}
+.navbar.navbar .dropdown-menu .active > a,
+.navbar-default.navbar .dropdown-menu .active > a {
+    background-color: #83c6c3;
+    /*background-color: #009688;*/
+    color: rgba(255, 255, 255, 0.84);
+}
+.navbar-primary.navbar {
+    background-color: #83c6c3;
+    /*background-color: #009688;*/
+    color: rgba(255, 255, 255, 0.84);
+}
+.navbar-primary.navbar .dropdown-menu li > a:focus {
+    color: #83c6c3;
+    /*color: #009688;*/
+    background-color: #eeeeee;
+}
+.navbar-primary.navbar .dropdown-menu .active > a {
+    background-color: #83c6c3;
+    /*background-color: #009688;*/
+    color: rgba(255, 255, 255, 0.84);
+}
+.nav-tabs {
+    background: #44a4da;
+    /*background: #009688;*/
+}
+.nav-tabs > li > a {
+    color: #FFFFFF;
+    border: 0;
+    margin: 0;
+}
+.nav-tabs > li > a:hover {
+    background-color: transparent;
+    border: 0;
+}
+.nav-tabs > li > a,
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+    background-color: transparent !important;
+    border: 0 !important;
+    color: #FFFFFF !important;
+    font-weight: 500;
+}
+.nav-tabs > li.disabled > a,
+.nav-tabs > li.disabled > a:hover {
+    color: rgba(255, 255, 255, 0.5);
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+    color: #555 !important;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+i.active, i.inactive {font-size:40px;cursor:pointer;}
+i.active, i.inactive {font-size:40px;cursor:pointer;}
+i.active { color: #5cb85c}
+i.inactive {color: #d9534f}
+button.active, button.inactive {font-size:20px;cursor:pointer;}
+button.active, button.inactive {font-size:20px;cursor:pointer;}
+button.active { color: #5cb85c}
+button.inactive {color: #d9534f}
+.btn-info.active:not(.btn-link):not(.btn-flat) span.text-info { color: #ffffff}
+.dropup .btn.btn-sm {
+    padding: 5px 8px;
+}
+.datetime-picker-dropdown {
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default {
+    border: 0;
+}
+
+.datetime-picker-dropdown > li.time-picker-menu div > table {
+}
+.label-fm {
+    line-height: 34px;
+    height: 1em; /* so overflow hidden works and keeps text on one row */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.header-fm {
+    padding-top: 0px;
+}
+.div-input-fr, .div-input-fr-lg {
+    padding-left: 25px;
+}
+
+#hoeapp-wrapper[hoe-device-type="tablet"] :not(.hoe-minimized-lpanel) .div-input-fr-lg {
+    padding-left: 35px;
+}
+.toggle-switch-fm {
+    padding: 15px;
+}
+
+.btn.active.btn-intel:not(.btn-link):not(.btn-flat), .btn-default.active:not(.btn-link):not(.btn-flat) {
+    background-color: #009688;
+    color: #fff;
+}
+.btn.btn-intel:not(.btn-link):not(.btn-flat), .btn-default.btn-intel:not(.btn-link):not(.btn-flat) {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.84);
+    color: rgba(0, 0, 0, 0.84);
+}

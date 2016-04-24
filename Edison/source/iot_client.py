@@ -27,6 +27,7 @@ regex_split_json_packets = re.compile('}\s*{')
 message_queue = Queue()
 iot_connected = False
 
+devices = []
 
 class WebSocketClient():
     """
@@ -154,7 +155,8 @@ class IoTWebSocketClient(WebSocketClient):
         """
         from random import randint
         global iot_connected
-        self.thisLCD = lcd.Jhd1313m1(0, 0x3E, 0x62)
+        if (prefs.getboolean("defaults", "lcd_en")):
+            self.thisLCD = lcd.Jhd1313m1(0, 0x3E, 0x62)
         iot_connected = True
         logging.info('IoT Connected! Conn:%s' % str(iot_connected))
         self.send_message('channel', 'setchannelmode',
@@ -381,7 +383,10 @@ class IoTWebSocketClient(WebSocketClient):
             if handler == 'control' and msgtype == 'notification':
                 response = self.send_notification_to_final_user(data)
             elif handler == 'control' and msgtype == 'print_message':
-                response = self.print_lcd_message(data)
+                if (prefs.getboolean("defaults", "lcd_en")):
+                    response = self.print_lcd_message(data)
+            elif handler == 'control' and msgtype == 'track_articles':
+                    response = self.update_tracked_tags(data)
         except Exception as e:
             logging.error('Unknown exception while handling notification ' +
                           'from IoT')
@@ -401,6 +406,17 @@ class IoTWebSocketClient(WebSocketClient):
                 for r in r_receivers:
                     channel = r.get_channel(r_channel)
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
+
+    def update_tracked_tags(self, data):
+        global devices
+        devices = data['tags']
+
+        for i in range(len(devices)):
+            for m,n in devices[i].iteritems():
+                devices[i][m] = int[n] if m == "id" else str(n)
+                print(devices[i][m])
+
+        return
 
     def clear_display(self, myLcd):
         myLcd.setColor(0, 0, 0)
