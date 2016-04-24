@@ -384,6 +384,8 @@ class IoTWebSocketClient(WebSocketClient):
             elif handler == 'control' and msgtype == 'print_message':
                 if (prefs.getboolean("defaults", "lcd_en")):
                     response = self.print_lcd_message(data)
+            elif handler == 'control' and msgtype == 'track_articles':
+                    response = self.update_tracked_tags(data)
         except Exception as e:
             logging.error('Unknown exception while handling notification ' +
                           'from IoT')
@@ -403,6 +405,11 @@ class IoTWebSocketClient(WebSocketClient):
                 for r in r_receivers:
                     channel = r.get_channel(r_channel)
                     channel.send(r_channel, r_msgtype, r_message, r_respondID)
+
+    def update_tracked_tags(self, data):
+        global devices
+        devices = data['tags']
+        return
 
     def clear_display(self, myLcd):
         myLcd.setColor(0, 0, 0)

@@ -34,6 +34,7 @@ SHAKE_THRESHOLD = 30
 myBuzzer = None
 myDigitalAccelerometer = None
 myLcd = None
+devices = []
 
 def setup_logging():
     '''
@@ -175,7 +176,7 @@ def main_loop(ioloop):
 
     :param ioloop:  Tornado ioloop instance
     '''
-
+    global devices
     chord_ind = 0
     xyz_count = 0
     # check shake for 5 sec
