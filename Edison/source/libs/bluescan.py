@@ -8,6 +8,9 @@ import struct
 import bluetooth._bluetooth as bluez
 import bluetooth
 
+
+SIGNAL_THRESHOLD = -50
+
 def printpacket(pkt):
     for c in pkt:
         sys.stdout.write("%02x " % struct.unpack("B",c)[0])
@@ -83,7 +86,7 @@ def device_inquiry_with_with_rssi(sock):
     bluez.hci_filter_set_ptype(flt, bluez.HCI_EVENT_PKT)
     sock.setsockopt( bluez.SOL_HCI, bluez.HCI_FILTER, flt )
 
-    duration = 20
+    duration = 5
     max_responses = 255
     cmd_pkt = struct.pack("BBBBB", 0x33, 0x8b, 0x9e, duration, max_responses)
     bluez.hci_send_cmd(sock, bluez.OGF_LINK_CTL, bluez.OCF_INQUIRY, cmd_pkt)
@@ -160,22 +163,28 @@ def check_devices(devices):
 
     missing = []
     results = device_inquiry_with_with_rssi(sock)
-    print results
+    for a in results:
+        print a
+
     for device in devices:
         key = device['mac']
         found = 0
         for result in results:
-            if (key in result[0]):
+            if ((key in result[0]) and (result[1] > SIGNAL_THRESHOLD)):
                 found = 1
 
         if found == 0:
-            missing.append(device['id'])
+            missing.append(device['name'])
 
     return missing
 
 if __name__=="__main__":
     devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name': 
-'cellphone0'},
+'ATeamKeys'},
                {'id': 1, 'mac': "00:00:00:00:00:00", 'name': 
-'cellphone1'}]
+'cellphone1'},
+               {'id': 2, 'mac': "4C:74:03:64:85:2E", "name": 
+'Aquarius'},
+               {'id': 3, 'mac': "C0:EE:FB:32:E4:84", "name": 
+'ATeamWallet'}]
     print(check_devices(devices))
