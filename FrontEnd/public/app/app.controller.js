@@ -2,10 +2,10 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
   $scope.status_gym = false;
   $scope.status_work = false;
 
-  $scope.item1 = {gym: true, work: false};
-  $scope.item2 = {gym: false, work: false};
-  $scope.item3 = {gym: true, work: true};
-  $scope.item4 = {gym: true, work: true};
+  $scope.item1 = {'gym': true, 'work': false};
+  $scope.item2 = {'gym': false, 'work': true};
+  $scope.item3 = {'gym': true, 'work': true};
+  $scope.item4 = {'gym': true, 'work': false};
 
   $scope.items = [
   $scope.item1,
@@ -14,6 +14,7 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
   $scope.item4
   ]
 
+  $scope.smartBagIP = '127.0.0.1'
   $scope.tag1 = {'id': 1, 'name': 'Tennis', 'mac': 'MAC:1:1:1'}
   $scope.tag2 = {'id': 2, 'name': 'Wallet', 'mac': 'MAC:1:1:2'}
   $scope.tag3 = {'id': 3, 'name': 'Keys', 'mac': 'MAC:1:1:3'}
@@ -39,13 +40,27 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
     console.log($scope.item2);
     console.log($scope.item3);
     console.log($scope.item4);
-
     data = {};
     tracked_tags = [];
 
+    if ($scope.status_gym == true){
+        if ($scope.item1['gym'] == true) { tracked_tags.push($scope.tag1);}
+        if ($scope.item2['gym'] == true) { tracked_tags.push($scope.tag2);}
+        if ($scope.item3['gym'] == true) { tracked_tags.push($scope.tag3);}
+        if ($scope.item4['gym'] == true) { tracked_tags.push($scope.tag4);}
+    }
+    if ($scope.status_work == true){
+        if ($scope.item1['work'] == true) { tracked_tags.push($scope.tag1);}
+        if ($scope.item2['work'] == true) { tracked_tags.push($scope.tag2);}
+        if ($scope.item3['work'] == true) { tracked_tags.push($scope.tag3);}
+        if ($scope.item4['work'] == true) { tracked_tags.push($scope.tag4);}
 
-
-    //$scope.send("send_notification", data, -1, null);
+    }
+    
+    data['target'] = $scope.smartBagIP
+    data['tags'] = tracked_tags
+    console.log(data);
+    $scope.send("set_tracking_place", data, -1, null);
 
   }
 
