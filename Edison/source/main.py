@@ -34,7 +34,6 @@ SHAKE_THRESHOLD = 30
 myBuzzer = None
 myDigitalAccelerometer = None
 myLcd = None
-devices = []
 
 def setup_logging():
     '''

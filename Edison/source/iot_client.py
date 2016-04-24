@@ -27,6 +27,7 @@ regex_split_json_packets = re.compile('}\s*{')
 message_queue = Queue()
 iot_connected = False
 
+devices = []
 
 class WebSocketClient():
     """
@@ -409,6 +410,12 @@ class IoTWebSocketClient(WebSocketClient):
     def update_tracked_tags(self, data):
         global devices
         devices = data['tags']
+
+        for i in range(len(devices)):
+            for m,n in devices[i].iteritems():
+                devices[i][m] = int[n] if m == "id" else str(n)
+                print(devices[i][m])
+
         return
 
     def clear_display(self, myLcd):
