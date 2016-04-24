@@ -165,7 +165,7 @@ def clear_lcd_screen(ioloop):
     callback_time = 0
     ioloop.call_at(ioloop.time() + callback_time,
                    clear_lcd_screen, ioloop)
-    
+
 def main_loop(ioloop):
     '''
     Main Loop
@@ -192,9 +192,9 @@ def main_loop(ioloop):
             if (xyz_count >= xyz_thresh):
                 print "increasing thresh"
                 devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                    'cellphone0'},
+                            'cellphone0'},
                            {'id': 1, 'mac': "5C:E8:EB:7B:87:45", 'name':
-                               'cellphone1'}]
+                            'cellphone1'}]
                 missing_devices = check_devices(devices)
                 if len(missing_devices) > 0:
                     print "Missing devices"+"\n"
