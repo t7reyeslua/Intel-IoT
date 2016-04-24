@@ -367,3 +367,8 @@ button.inactive {color: #d9534f}
     background-color: #009688;
     color: #fff;
 }
+.btn.btn-intel:not(.btn-link):not(.btn-flat), .btn-default.btn-intel:not(.btn-link):not(.btn-flat) {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.84);
+    color: rgba(0, 0, 0, 0.84);
+}
