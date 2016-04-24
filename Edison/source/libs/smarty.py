@@ -106,15 +106,15 @@ def run_control_loop():
 		missing_devices = bluescan.check_devices(devices)
 		if len(missing_devices) > 0:
 		    print "Missing devices"+"\n".join(missing_devices)
-		    	for chord_ind in range (0,15):
-			    print myBuzzer.playSound(chords[chord_ind], 100000)
-			    print "buzzing"
-			    #time.sleep(0.1)
-			    #chord_ind = (chord_ind + 1) % 2
-			    chord_ind += 1
-			myBuzzer.stopSound()
-			xyz_count = 0
-			print outputStr
+		    for chord_ind in range (0,15):
+		        print myBuzzer.playSound(chords[chord_ind], 100000)
+			print "buzzing"
+			#time.sleep(0.1)
+			#chord_ind = (chord_ind + 1) % 2
+			chord_ind += 1
+		myBuzzer.stopSound()
+		xyz_count = 0
+		print outputStr
         time.sleep(0.05)
     print "loop over"
     xyz_count = 0
