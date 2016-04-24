@@ -362,3 +362,8 @@ button.inactive {color: #d9534f}
 .toggle-switch-fm {
     padding: 15px;
 }
+
+.btn.active.btn-intel:not(.btn-link):not(.btn-flat), .btn-default.active:not(.btn-link):not(.btn-flat) {
+    background-color: #009688;
+    color: #fff;
+}
