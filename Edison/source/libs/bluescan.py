@@ -158,17 +158,24 @@ def check_devices(devices):
             print("error while setting inquiry mode")
         print("result: %d" % result)
 
-
-
-    """Check if there are any device missing."""
+    missing = []
     results = device_inquiry_with_with_rssi(sock)
     print results
     for device in devices:
         key = device['mac']
+        found = 0
         for result in results:
-            if key in result[0]:
-                print "Present"
+            if (key in result[0]):
+                found = 1
+
+        if found == 0:
+            missing.append(device['id'])
+
+    return missing
 
 if __name__=="__main__":
-    devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name': 'cellphone0'}]
-    check_devices(devices)
+    devices = [{'id': 0, 'mac': "5C:E8:EB:7B:87:45", 'name': 
+'cellphone0'},
+               {'id': 1, 'mac': "00:00:00:00:00:00", 'name': 
+'cellphone1'}]
+    print(check_devices(devices))
