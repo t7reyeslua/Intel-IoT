@@ -72,7 +72,7 @@ angular.module('myApp').controller('AppCtrl', function($scope, $rootScope, $webs
         return prev_id;
   }
 
-  var WS_URL = "ws://" + "localhost" + ":8878/API-ws/";
+  var WS_URL = "ws://" + "10.10.40.4" + ":8878/API-ws/";
   $scope.ws = $websocket.$get(WS_URL, 'control');
 
   $scope.$on('$destroy', function detachMessageListener() {
